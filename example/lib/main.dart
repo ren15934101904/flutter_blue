@@ -117,7 +117,9 @@ class FindDevicesScreen extends StatelessWidget {
                           result: r,
                           onTap: () => Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            r.device.connect();
+                            r.device.connect(
+                                autoConnect: false,
+                                timeout: Duration(seconds: 3));
                             return DeviceScreen(device: r.device);
                           })),
                         ),
@@ -219,7 +221,8 @@ class DeviceScreen extends StatelessWidget {
                   text = 'DISCONNECT';
                   break;
                 case BluetoothDeviceState.disconnected:
-                  onPressed = () => device.connect();
+                  onPressed = () => device.connect(
+                      autoConnect: false, timeout: Duration(seconds: 3));
                   text = 'CONNECT';
                   break;
                 default:
@@ -294,6 +297,8 @@ class DeviceScreen extends StatelessWidget {
               stream: device.services,
               initialData: [],
               builder: (c, snapshot) {
+                print(snapshot.data);
+                print(device);
                 return Column(
                   children: _buildServiceTiles(snapshot.data!),
                 );
